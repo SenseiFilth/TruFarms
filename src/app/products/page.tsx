@@ -25,6 +25,9 @@ const ProductsPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [open, setOpen] = useState(false);
 
+  // State to hold the edited product data
+  const [editedProduct, setEditedProduct] = useState(null);
+
   const categories = ['All', 'Cannabis Flower', 'THC Oil', 'THC Edibles', 'CBD Oils', 'CBD Edibles'];
 
   const filteredProducts = products.filter(product => {
@@ -37,7 +40,23 @@ const ProductsPage = () => {
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
+    setEditedProduct({...product}); // Initialize editedProduct with the selected product
     setOpen(true);
+  };
+
+  // Function to handle changes in the input fields
+  const handleInputChange = (e, field) => {
+    setEditedProduct({
+      ...editedProduct,
+      [field]: e.target.value,
+    });
+  };
+
+  const handleEditSubmit = () => {
+    // Here you would implement the logic to update the product in your data store
+    // For now, we'll just close the dialog
+    console.log('Edited Product:', editedProduct);
+    setOpen(false);
   };
 
   return (
@@ -99,41 +118,68 @@ const ProductsPage = () => {
               {selectedProduct?.description}
             </DialogDescription>
           </DialogHeader>
-          {selectedProduct && (
+          {editedProduct && (
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
-                <Input id="name" value={selectedProduct.name} className="col-span-3" />
+                <Input
+                  id="name"
+                  value={editedProduct.name}
+                  className="col-span-3"
+                  onChange={(e) => handleInputChange(e, 'name')}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="description" className="text-right">
                   Description
                 </Label>
-                <Input id="description" value={selectedProduct.description} className="col-span-3" />
+                <Input
+                  id="description"
+                  value={editedProduct.description}
+                  className="col-span-3"
+                  onChange={(e) => handleInputChange(e, 'description')}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="category" className="text-right">
                   Category
                 </Label>
-                <Input id="category" value={selectedProduct.category} className="col-span-3" />
+                <Input
+                  id="category"
+                  value={editedProduct.category}
+                  className="col-span-3"
+                  onChange={(e) => handleInputChange(e, 'category')}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="quantity" className="text-right">
                   Quantity
                 </Label>
-                <Input id="quantity" value={selectedProduct.quantity} className="col-span-3" />
+                <Input
+                  id="quantity"
+                  value={editedProduct.quantity}
+                  className="col-span-3"
+                  onChange={(e) => handleInputChange(e, 'quantity')}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="storeLocation" className="text-right">
                   Store Location
                 </Label>
-                <Input id="storeLocation" value={selectedProduct.storeLocation} className="col-span-3" />
+                <Input
+                  id="storeLocation"
+                  value={editedProduct.storeLocation}
+                  className="col-span-3"
+                  onChange={(e) => handleInputChange(e, 'storeLocation')}
+                />
               </div>
             </div>
           )}
-          <Button type="submit">Edit</Button>
+          <Button type="submit" onClick={handleEditSubmit}>
+            Edit
+          </Button>
         </DialogContent>
       </Dialog>
     </div>
