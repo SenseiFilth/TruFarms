@@ -56,7 +56,7 @@ const MainNav = () => {
   ];
 
   return (
-    <nav className="bg-secondary p-4 flex justify-around items-center shadow-md">
+    <header className="bg-secondary p-4 flex justify-between items-center shadow-md container mx-auto">
       {navItems.map((item) => (
         <Link
           key={item.name}
@@ -72,7 +72,7 @@ const MainNav = () => {
           {item.name}
         </Link>
       ))}
-    </nav>
+    </header>
   );
 };
 
