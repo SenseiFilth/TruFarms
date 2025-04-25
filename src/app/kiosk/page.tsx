@@ -1,17 +1,18 @@
-
 'use client';
 
 import React, {useState} from 'react';
-import KioskNavigation from '@/components/ui/kiosk-navigation';
 import {scanID} from '@/services/id-scanner';
 import {scanBarcode} from '@/services/barcode-scanner';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
+import {useRouter} from 'next/navigation';
+import {ArrowLeft} from 'lucide-react';
 
 const KioskPage = () => {
   const [idScanResult, setIdScanResult] = useState(null);
   const [barcodeScanResult, setBarcodeScanResult] = useState(null);
   const [isIdScanned, setIsIdScanned] = useState(false);
+  const router = useRouter();
 
   const handleIDScan = async () => {
     // Mock base64 image
@@ -28,24 +29,33 @@ const KioskPage = () => {
     setBarcodeScanResult(result);
   };
 
+  const handleBackToDashboard = () => {
+    router.push('/');
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <KioskNavigation />
-      <main className="container mx-auto px-4 py-8 flex-grow">
+    <div className="flex flex-col min-h-screen bg-secondary">
+      <header className="flex items-center justify-between p-4">
+        <Button variant="ghost" onClick={handleBackToDashboard}>
+          <ArrowLeft className="mr-2 h-4 w-4"/>
+          Back to Dashboard
+        </Button>
+      </header>
+      <main className="container mx-auto px-4 py-8 flex-grow flex items-center justify-center">
         {!isIdScanned ? (
-          <Card className="max-w-md mx-auto">
+          <Card className="max-w-md w-full">
             <CardHeader>
-              <CardTitle className="text-center">Please Scan Your ID</CardTitle>
+              <CardTitle className="text-center text-xl font-semibold">Please Scan Your ID</CardTitle>
             </CardHeader>
             <CardContent className="flex justify-center">
               <Button onClick={handleIDScan}>Scan ID</Button>
             </CardContent>
           </Card>
         ) : (
-          <>
+          <div className="w-full max-w-md">
             <Card className="mb-4">
               <CardHeader>
-                <CardTitle>ID Information</CardTitle>
+                <CardTitle className="text-xl font-semibold">ID Information</CardTitle>
               </CardHeader>
               <CardContent>
                 {idScanResult ? (
@@ -68,7 +78,7 @@ const KioskPage = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Scan Barcode</CardTitle>
+                <CardTitle className="text-xl font-semibold">Scan Barcode</CardTitle>
               </CardHeader>
               <CardContent className="flex justify-center">
                 <Button onClick={handleBarcodeScan}>Scan Barcode</Button>
@@ -78,7 +88,7 @@ const KioskPage = () => {
             {barcodeScanResult && (
               <Card className="mt-4">
                 <CardHeader>
-                  <CardTitle>Barcode Information</CardTitle>
+                  <CardTitle className="text-xl font-semibold">Barcode Information</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p>
@@ -90,7 +100,7 @@ const KioskPage = () => {
                 </CardContent>
               </Card>
             )}
-          </>
+          </div>
         )}
       </main>
     </div>

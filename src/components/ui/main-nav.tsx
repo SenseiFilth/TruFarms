@@ -1,95 +1,78 @@
-
 'use client';
 
-import React, {useState} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {cn} from '@/lib/utils';
-import {Button} from '@/components/ui/button';
 import {usePathname} from 'next/navigation';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+  Home,
+  Package,
+  Users,
+  CreditCard,
+  User,
+  Settings,
+  LogOut
+} from 'lucide-react'; // Make sure these icons are available in lucide-react
+import { cn } from "@/lib/utils";
 
 const MainNav = () => {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItems = [
-    {name: 'Products', href: '/products'},
-    {name: 'Customers', href: '/customers'},
-    {name: 'Payments', href: '/payments'},
-    {name: 'Employees', href: '/employees'},
-    {name: 'Profile', href: '/profile'},
-    {name: 'Settings', href: '/settings'},
+    {
+      name: 'Dashboard',
+      href: '/',
+      icon: Home,
+    },
+    {
+      name: 'Products',
+      href: '/products',
+      icon: Package,
+    },
+    {
+      name: 'Customers',
+      href: '/customers',
+      icon: Users,
+    },
+    {
+      name: 'Payments',
+      href: '/payments',
+      icon: CreditCard,
+    },
+    {
+      name: 'Employees',
+      href: '/employees',
+      icon: User,
+    },
+    {
+      name: 'Profile',
+      href: '/profile',
+      icon: User,
+    },
+    {
+      name: 'Settings',
+      href: '/settings',
+      icon: Settings,
+    },
   ];
 
   return (
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Dashboard
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>Navigate to Dashboard</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Products
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>Manage your inventory items</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Customers
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>View and manage customer records</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Payments
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>Process and log transactions</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Employees
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>Manage employee records and access control</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Profile
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>User information and app session management</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Settings
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <p>App preferences and customization</p>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <nav className="bg-secondary p-4 flex justify-around items-center shadow-md">
+      {navItems.map((item) => (
+        <Link
+          key={item.name}
+          href={item.href}
+          className={cn(
+            "flex flex-col items-center text-sm font-medium",
+            pathname === item.href
+              ? "text-primary" // Highlight the active link
+              : "text-foreground hover:text-primary transition-colors"
+          )}
+        >
+          {item.icon && <item.icon className="h-5 w-5 mb-1" />}
+          {item.name}
+        </Link>
+      ))}
+    </nav>
   );
 };
 
