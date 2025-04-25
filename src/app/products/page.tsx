@@ -14,10 +14,16 @@ import {
 import {Input} from '@/components/ui/input';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import MainNav from '@/components/ui/main-nav';
+import {Card, CardContent, CardHeader, CardTitle, CardDescription} from '@/components/ui/card';
+import {Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription} from '@/components/ui/dialog';
+import {Label} from '@/components/ui/label';
+import {Button} from '@/components/ui/button';
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const categories = ['All', 'Cannabis Flower', 'THC Oil', 'THC Edibles', 'CBD Oils', 'CBD Edibles'];
 
@@ -28,6 +34,11 @@ const ProductsPage = () => {
     const categoryMatch = categoryFilter === 'All' || product.category === categoryFilter;
     return searchMatch && categoryMatch;
   });
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setOpen(true);
+  };
 
   return (
     <div className="container mx-auto py-10">
@@ -68,7 +79,7 @@ const ProductsPage = () => {
         </TableHeader>
         <TableBody>
           {filteredProducts.map((product) => (
-            <TableRow key={product.sku}>
+            <TableRow key={product.sku} onClick={() => handleProductClick(product)}>
               <TableCell className="font-medium">{product.sku}</TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.description}</TableCell>
@@ -79,6 +90,52 @@ const ProductsPage = () => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{selectedProduct?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedProduct?.description}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedProduct && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input id="name" value={selectedProduct.name} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Description
+                </Label>
+                <Input id="description" value={selectedProduct.description} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="category" className="text-right">
+                  Category
+                </Label>
+                <Input id="category" value={selectedProduct.category} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="quantity" className="text-right">
+                  Quantity
+                </Label>
+                <Input id="quantity" value={selectedProduct.quantity} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="storeLocation" className="text-right">
+                  Store Location
+                </Label>
+                <Input id="storeLocation" value={selectedProduct.storeLocation} className="col-span-3" />
+              </div>
+            </div>
+          )}
+          <Button type="submit">Edit</Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
